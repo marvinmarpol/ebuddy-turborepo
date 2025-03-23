@@ -13,7 +13,7 @@ export const createServer = (): Express => {
     .use(cors())
 
     .get("/status", (_, res) => {
-      return res.json({ ok: true });
+      return res.status(200).json({ ok: true });
     });
 
   return app;
