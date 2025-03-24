@@ -1,4 +1,4 @@
-import { User } from "@repo/entities/user";
+import { User } from "@repo/entities";
 
 import { db } from "../config/firebaseConfig";
 

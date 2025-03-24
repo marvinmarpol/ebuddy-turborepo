@@ -3,10 +3,26 @@
   "version": "0.0.0",
   "type": "module",
   "private": true,
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/es/index.js",
+  "module": "./dist/es/index.js",
+  "types": "./dist/es/index.d.ts",
   "exports": {
-    "./*": "./*.ts"
+    ".": {
+      "import": {
+        "types": "./dist/es/index.d.ts",
+        "default": "./dist/es/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.cts",
+        "default": "./dist/cjs/index.cjs"
+      }
+    }
   },
   "scripts": {
+    "build": "bunchee",
     "lint": "eslint ./",
     "check-types": "tsc --noEmit"
   },
@@ -15,6 +31,10 @@
     "@repo/typescript-config": "*",
     "@types/node": "^22.13.9",
     "eslint": "^9.22.0",
-    "typescript": "5.8.2"
+    "typescript": "5.8.2",
+    "bunchee": "^6.4.0"
+  },
+  "dependencies": {
+    "zod": "^3.24.2"
   }
 }

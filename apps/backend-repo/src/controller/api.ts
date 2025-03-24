@@ -1,16 +1,20 @@
-import { Request, Response } from "express";
-import { getUserById, updateUser } from "../repository/userCollection";
+import { Request, Response } from 'express';
+import { userSchema } from '@repo/entities';
+
+import { getUserById, updateUser } from '../repository/userCollection';
 
 export const fetchUserData = async (req: Request, res: Response) => {
   const userId = req.params.id;
 
   try {
     const user = await getUserById(userId);
-    if (!user) return res.status(404).json({ error: "User not found" });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
 
-    res.json(user);
+    res.status(200).json(user);
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch user data", raw: error });
+    res.status(500).json({ error: 'Failed to fetch user data', raw: error });
   }
 };
 
@@ -18,10 +22,18 @@ export const updateUserData = async (req: Request, res: Response) => {
   const userId = req.params.id;
   const userData = req.body;
 
+  const validation = userSchema.safeParse(userData);
+  if (!validation.success) {
+    return res.status(400).json({
+      error: 'Validation failed',
+      details: validation.error.errors,
+    });
+  }
+
   try {
-    await updateUser(userId, userData);
-    res.json({ message: "User updated successfully" });
+    await updateUser(userId, validation.data);
+    res.status(200).json(validation.data);
   } catch (error) {
-    res.status(500).json({ error: "Failed to update user data", raw: error });
+    res.status(500).json({ error: 'Failed to update user data', raw: error });
   }
 };
