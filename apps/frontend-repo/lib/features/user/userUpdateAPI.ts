@@ -15,8 +15,10 @@ export const updateUserData = async ({
   const baseURL =
     process.env.NEXT_PUBLIC_UPDATE_API_URL || "http://localhost:5000";
   const path =
-    process.env.NNEXT_PUBLIC_UPDATE_USER_PATH || "/api/update-user-data";
+    process.env.NEXT_PUBLIC_UPDATE_USER_PATH || "/api/update-user-data";
   const headers: Record<string, string> = { authorization: token };
+
+  await new Promise((resolve) => setTimeout(resolve, 1500));
 
   return await httpRequest<User>(
     "POST",
