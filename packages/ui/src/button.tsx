@@ -1,20 +1,23 @@
 "use client";
 
+import { Button } from "@mui/material";
 import { ReactNode } from "react";
 
 interface ButtonProps {
-  children: ReactNode;
-  className?: string;
-  appName: string;
+  children?: ReactNode;
+  onclick?: () => void;
+  disabled?: boolean;
 }
 
-export const Button = ({ children, className, appName }: ButtonProps) => {
+export const UpdateButton = ({ children, onclick, disabled }: ButtonProps) => {
   return (
-    <button
-      className={className}
-      onClick={() => alert(`Hello from your ${appName} app!`)}
+    <Button
+      variant='contained'
+      color='primary'
+      onClick={onclick}
+      disabled={disabled}
     >
       {children}
-    </button>
+    </Button>
   );
 };
