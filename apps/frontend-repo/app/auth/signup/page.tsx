@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Backdrop,
   Box,
@@ -15,16 +15,17 @@ import {
   Container,
   TextField,
   Typography,
-} from '@mui/material';
+} from "@mui/material";
 
-import { useAuth } from '../../../context/authProvider';
-import { registerSchema } from '@repo/entities';
+import { useAuth } from "../../../context/authProvider";
+import { registerSchema } from "@repo/entities";
+import { resolve } from "path";
 
 export default function Signin() {
-  const [errorMsg, setErrorMsg] = useState('');
+  const [errorMsg, setErrorMsg] = useState("");
 
   const router = useRouter();
-  const { register: registerUser } = useAuth();
+  const { register: registerUser, logout } = useAuth();
 
   type FormFields = z.infer<typeof registerSchema>;
 
@@ -37,24 +38,24 @@ export default function Signin() {
     formState: { errors, isSubmitting },
   } = useForm<FormFields>({
     defaultValues: {
-      email: '',
-      password: '',
-      confirmPassword: '',
+      email: "",
+      password: "",
+      confirmPassword: "",
     },
     resolver: zodResolver(registerSchema),
   });
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    setErrorMsg('');
+    setErrorMsg("");
 
     if (data.password !== data.confirmPassword) {
-      setErrorMsg('Password confimation failed');
+      setErrorMsg("Password confimation failed");
       return;
     }
 
     try {
-      const res = await registerUser(data.email, data.password);
-      router.push('/auth/signin');
+      await registerUser(data.email, data.password);
+      router.push("/");
     } catch (error: any) {
       setErrorMsg(error.message as string);
     } finally {
@@ -66,13 +67,13 @@ export default function Signin() {
     <Container
       maxWidth="xs"
       sx={{
-        display: 'flex',
-        height: '100vh',
-        alignItems: 'center',
+        display: "flex",
+        height: "100vh",
+        alignItems: "center",
       }}
     >
-      <Card sx={{ width: '100%', padding: '3em' }}>
-        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+      <Card sx={{ width: "100%", padding: "3em" }}>
+        <Box sx={{ display: "flex", flexDirection: "column" }}>
           <Typography variant="h4" gutterBottom>
             Sign Up
           </Typography>
@@ -91,7 +92,8 @@ export default function Signin() {
               label="Email"
               variant="outlined"
               margin="normal"
-              {...register('email')}
+              autoComplete="off"
+              {...register("email")}
             />
             {errors.email && (
               <Typography gutterBottom variant="body2" color="error">
@@ -105,7 +107,7 @@ export default function Signin() {
               variant="outlined"
               margin="normal"
               type="password"
-              {...register('password')}
+              {...register("password")}
             />
             {errors.password && (
               <Typography gutterBottom variant="body2" color="error">
@@ -119,7 +121,7 @@ export default function Signin() {
               variant="outlined"
               margin="normal"
               type="password"
-              {...register('confirmPassword')}
+              {...register("confirmPassword")}
             />
             {errors.confirmPassword?.message && (
               <Typography gutterBottom variant="body2" color="error">
@@ -136,9 +138,9 @@ export default function Signin() {
             >
               Sign Up
             </Button>
-            <Box sx={{ textAlign: 'center' }}>
+            <Box sx={{ textAlign: "center" }}>
               <Typography variant="body1">Already have an account?</Typography>
-              <Typography variant="body2" color="blue">
+              <Typography variant="body2" color="primary">
                 <Link href="/auth/signin">Sign In</Link>
               </Typography>
             </Box>
@@ -147,7 +149,7 @@ export default function Signin() {
       </Card>
 
       <Backdrop
-        sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
+        sx={(theme) => ({ color: "#fff", zIndex: theme.zIndex.drawer + 1 })}
         open={isSubmitting}
       >
         <CircularProgress color="inherit" />
