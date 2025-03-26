@@ -2,7 +2,7 @@
   "extends": ["//"],
   "tasks": {
     "build": {
-      "env": ["PORT", "FIREBASE_ACCOUNT_PATH"],
+      "env": ["PORT", "NODE_ENV", "FIREBASE_ACCOUNT_PATH", "FIRESTORE_HOST"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**"]
     }
