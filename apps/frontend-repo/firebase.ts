@@ -14,7 +14,7 @@ const firebaseConfig = {
 
 const nodeEnv = process.env.NODE_ENV || 'development';
 const firestoreEmulatorHost = process.env.FIRESTORE_EMULATOR_HOST || '127.0.0.1';
-const authEmulatorHost = process.env.AUTH_EMULATOR_HOST || 'http://127.0.0.1:9099';
+const authEmulatorHost = process.env.FIREBASE_AUTH_EMULATOR_HOST || 'http://127.0.0.1:9099';
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);

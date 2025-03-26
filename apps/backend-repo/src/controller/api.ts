@@ -14,7 +14,8 @@ const DEFAULT_PER_PAGE = 10;
 
 export const userList = async (req: Request, res: Response) => {
   const limit = parseInt(req.query.limit as string, 10) || DEFAULT_PER_PAGE;
-  const offset = parseInt(req.query.offset as string, 10) || 0;
+  const page = parseInt(req.query.page as string, 10) || 1;
+  const offset = Math.max(page, 1) - 1;
 
   try {
     const users = await getUsersPaginated(limit, offset);
@@ -51,9 +52,9 @@ export const updateUserData = async (req: Request, res: Response) => {
     });
   }
 
-  let currentRating = validation.data.totalAverageWeightRatings;
-  let currentRent = validation.data.numberOfRents;
-  let currentRecent = validation.data.recentlyActive;
+  let currentRating = validation.data.totalAverageWeightRatings || 0.0;
+  let currentRent = validation.data.numberOfRents || 0;
+  let currentRecent = validation.data.recentlyActive || 1743016720;
 
   try {
     const user = await getUserById(userId);

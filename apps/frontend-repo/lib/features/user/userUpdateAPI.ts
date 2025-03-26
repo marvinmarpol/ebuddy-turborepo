@@ -12,18 +12,17 @@ export const updateUserData = async ({
   token,
   user,
 }: UpdateUserPayload) => {
-  const baseURL =
-    process.env.NEXT_PUBLIC_UPDATE_API_URL || "http://localhost:5000";
+  const baseURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
   const path =
     process.env.NEXT_PUBLIC_UPDATE_USER_PATH || "/api/update-user-data";
-  const headers: Record<string, string> = { authorization: token };
+  const headers: Record<string, string> = { authorization: `Bearer ${token}` };
 
-  await new Promise((resolve) => setTimeout(resolve, 1500));
-
-  return await httpRequest<User>(
+  const response = await httpRequest<User>(
     "POST",
     `${baseURL + path}/${id}`,
     user,
     headers
   );
+
+  return response.data;
 };

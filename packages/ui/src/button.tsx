@@ -12,10 +12,11 @@ interface ButtonProps {
 export const UpdateButton = ({ children, onclick, disabled }: ButtonProps) => {
   return (
     <Button
-      variant='contained'
-      color='primary'
+      variant="contained"
+      color="primary"
       onClick={onclick}
       disabled={disabled}
+      type="submit"
     >
       {children}
     </Button>

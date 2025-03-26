@@ -6,10 +6,10 @@ export const userSchema = z.object({
   email: z.string().email('Invalid email format'),
   age: z.number().int().positive().optional(),
   address: z.string().optional(),
-  numberOfRents: z.number().default(0),
-  recentlyActive: z.number().default(() => Date.now() / 1000),
-  totalAverageWeightRatings: z.number().default(0.0),
-  totalPotential: z.number().optional().default(0),
+  numberOfRents: z.number().default(0).optional(),
+  recentlyActive: z.number().default(() => Date.now() / 1000).optional(),
+  totalAverageWeightRatings: z.number().default(0.0).optional(),
+  totalPotential: z.number().default(0).optional(),
 });
 
 export type User = z.infer<typeof userSchema>;

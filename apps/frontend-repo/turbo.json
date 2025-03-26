@@ -4,7 +4,7 @@
   ],
   "tasks": {
     "build": {
-      "env": ["PORT", "NODE_ENV", "FIRESTORE_EMULATOR_HOST", "AUTH_EMULATOR_HOST"],
+      "env": ["PORT", "NODE_ENV", "FIRESTORE_EMULATOR_HOST", "FIREBASE_AUTH_EMULATOR_HOST"],
       "outputs": [
         ".next/**",
         "!.next/cache/**"
