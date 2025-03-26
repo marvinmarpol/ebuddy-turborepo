@@ -5,10 +5,10 @@ import { UpdateButton } from '@repo/ui/button';
 import {
   selectStatus,
   updateUserAsync,
-} from '../lib/features/user/userUpdateSlice';
-import { useAppDispatch, useAppSelector } from '../lib/hooks';
-import { UpdateUserPayload } from '../lib/features/user/userUpdateAPI';
-import ProtectedRoute from '../components/protectedRoute';
+} from '../../lib/features/user/userUpdateSlice';
+import { useAppDispatch, useAppSelector } from '../../lib/hooks';
+import { UpdateUserPayload } from '../../lib/features/user/userUpdateAPI';
+import ProtectedRoute from '../../components/protectedRoute';
 
 export default function Home() {
   const dispatch = useAppDispatch();
