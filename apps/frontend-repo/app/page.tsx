@@ -1,26 +1,27 @@
-"use client";
+'use client';
 
-import { UpdateButton } from "@repo/ui/button";
+import { UpdateButton } from '@repo/ui/button';
 
 import {
   selectStatus,
   updateUserAsync,
-} from "../lib/features/user/userUpdateSlice";
-import { useAppDispatch, useAppSelector } from "../lib/hooks";
-import { UpdateUserPayload } from "../lib/features/user/userUpdateAPI";
+} from '../lib/features/user/userUpdateSlice';
+import { useAppDispatch, useAppSelector } from '../lib/hooks';
+import { UpdateUserPayload } from '../lib/features/user/userUpdateAPI';
+import ProtectedRoute from '../components/protectedRoute';
 
 export default function Home() {
   const dispatch = useAppDispatch();
   const status = useAppSelector(selectStatus);
 
   const userValue: UpdateUserPayload = {
-    id: "iQWqAB5p6a8dUeDmhoFMO",
-    token: "",
+    id: 'iQWqAB5p6a8dUeDmhoFMO',
+    token: '',
     user: {
-      name: "string",
-      email: "",
+      name: 'string',
+      email: '',
       age: 0,
-      address: "",
+      address: '',
       numberOfRents: 0,
       recentlyActive: 0,
       totalAverageWeightRatings: 0,
@@ -29,11 +30,13 @@ export default function Home() {
   };
 
   return (
-    <UpdateButton
-      onclick={() => dispatch(updateUserAsync(userValue))}
-      disabled={status == "loading"}
-    >
-      Update
-    </UpdateButton>
+    <ProtectedRoute>
+      <UpdateButton
+        onclick={() => dispatch(updateUserAsync(userValue))}
+        disabled={status == 'loading'}
+      >
+        Update
+      </UpdateButton>
+    </ProtectedRoute>
   );
 }
