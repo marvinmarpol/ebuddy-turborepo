@@ -9,6 +9,7 @@ import {
 import { useAppDispatch, useAppSelector } from '../../lib/hooks';
 import { UpdateUserPayload } from '../../lib/features/user/userUpdateAPI';
 import ProtectedRoute from '../../components/protectedRoute';
+import Navbar from '../../components/navbar';
 
 export default function Home() {
   const dispatch = useAppDispatch();
@@ -31,6 +32,7 @@ export default function Home() {
 
   return (
     <ProtectedRoute>
+      <Navbar />
       <UpdateButton
         onclick={() => dispatch(updateUserAsync(userValue))}
         disabled={status == 'loading'}
