@@ -4,7 +4,7 @@ import { httpRequest } from "@repo/helpers";
 export interface UserListPayload {
   token: string;
   limit?: number;
-  page?: User;
+  page?: number;
 }
 
 export const getUserList = async ({ token, limit, page }: UserListPayload) => {
