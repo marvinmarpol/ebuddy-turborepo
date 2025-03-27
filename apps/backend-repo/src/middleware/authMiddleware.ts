@@ -9,7 +9,7 @@ interface AuthenticatedRequest extends Request {
 export const authMiddleware = async (
   req: AuthenticatedRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const token = req.headers.authorization?.split(" ")[1];
 

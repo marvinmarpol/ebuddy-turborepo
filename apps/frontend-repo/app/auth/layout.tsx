@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
-import { ReactNode, useEffect } from 'react';
+import { useRouter } from "next/navigation";
+import { ReactNode, useEffect } from "react";
 
-import { useAuth } from '../../context/authProvider';
-import { Box, CircularProgress } from '@mui/material';
+import { useAuth } from "../../context/authProvider";
+import { Box, CircularProgress } from "@mui/material";
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
   const { user, loading } = useAuth();
@@ -12,7 +12,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!loading && user) {
-      router.push('/');
+      router.push("/");
     }
   }, [user, loading, router]);
 
@@ -20,10 +20,10 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
     return (
       <Box
         sx={{
-          display: 'flex',
-          height: '90vh',
-          alignItems: 'center',
-          justifyContent: 'center',
+          display: "flex",
+          height: "90vh",
+          alignItems: "center",
+          justifyContent: "center",
           mt: 5,
         }}
       >

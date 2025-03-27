@@ -16,6 +16,6 @@ export const getUserList = async ({ token, limit, page }: UserListPayload) => {
     "GET",
     `${baseURL + path}?limit=${limit}&page=${page}`,
     null,
-    headers
+    headers,
   );
 };

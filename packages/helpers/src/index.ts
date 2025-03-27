@@ -1,2 +1,2 @@
-export * from './httpClient';
-export * from './utilities';
+export * from "./httpClient";
+export * from "./utilities";

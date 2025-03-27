@@ -5,7 +5,7 @@ const RECENT_DIVIDER = 1000000000;
 export const getTotalPotential = (
   rating: number = 0.0,
   numberOfRents: number = 0,
-  recentlyActive: number = 1743016720
+  recentlyActive: number = 1743016720,
 ): number => {
   return (
     rating * RATING_WEIGHT +

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   AppBar,
@@ -9,11 +9,11 @@ import {
   IconButton,
   Toolbar,
   Typography,
-} from '@mui/material';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+} from "@mui/material";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
-import { useAuth } from '../context/authProvider';
+import { useAuth } from "../context/authProvider";
 
 export default function Navbar() {
   const router = useRouter();
@@ -24,7 +24,7 @@ export default function Navbar() {
     try {
       setLoading(true);
       await logout();
-      router.push('/auth/signin');
+      router.push("/auth/signin");
     } catch (error) {
     } finally {
       setLoading(false);
@@ -51,7 +51,7 @@ export default function Navbar() {
         </Toolbar>
       </AppBar>
       <Backdrop
-        sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
+        sx={(theme) => ({ color: "#fff", zIndex: theme.zIndex.drawer + 1 })}
         open={loading}
       >
         <CircularProgress color="inherit" />

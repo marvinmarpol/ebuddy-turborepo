@@ -13,7 +13,7 @@ export const createServer = (): Express => {
     .use(urlencoded({ extended: true }))
     .use(json())
     .use(cors())
-    
+
     .use("/api", userRoutes)
 
     .get("/status", (_, res) => {

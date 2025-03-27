@@ -14,7 +14,7 @@ export const userUpdateSlice = createAppSlice({
   initialState,
   reducers: (create) => ({
     updateUserAsync: create.asyncThunk(
-      async ({token, user }: UpdateUserPayload) => {
+      async ({ token, user }: UpdateUserPayload) => {
         return await updateUserData({ token, user });
       },
       {
@@ -27,7 +27,7 @@ export const userUpdateSlice = createAppSlice({
         rejected: (state) => {
           state.status = "failed";
         },
-      }
+      },
     ),
   }),
 

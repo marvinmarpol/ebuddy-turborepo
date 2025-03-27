@@ -5,13 +5,13 @@ import {
   DialogContent,
   TextField,
   Typography,
-} from '@mui/material';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
+} from "@mui/material";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import { User, userSchema } from '@repo/entities';
-import { UpdateButton } from '@repo/ui/button';
+import { User, userSchema } from "@repo/entities";
+import { UpdateButton } from "@repo/ui/button";
 
 interface props {
   openDialogue: boolean;
@@ -35,9 +35,9 @@ export default function AddDialogue({
     formState: { errors, isSubmitting },
   } = useForm<FormFields>({
     defaultValues: {
-      name: '',
-      email: '',
-      address: '',
+      name: "",
+      email: "",
+      address: "",
       numberOfRents: 0,
       totalAverageWeightRatings: 0.0,
     },
@@ -60,7 +60,7 @@ export default function AddDialogue({
       onClose={resetAndClose}
       slotProps={{
         paper: {
-          component: 'form',
+          component: "form",
           onSubmit: handleSubmit(handleFormSubmit),
         },
       }}
@@ -72,7 +72,7 @@ export default function AddDialogue({
           variant="outlined"
           margin="normal"
           autoComplete="off"
-          {...register('email')}
+          {...register("email")}
         />
         {errors.email && (
           <Typography gutterBottom variant="body2" color="error">
@@ -86,7 +86,7 @@ export default function AddDialogue({
           variant="outlined"
           margin="normal"
           autoComplete="off"
-          {...register('name')}
+          {...register("name")}
         />
         {errors.name && (
           <Typography gutterBottom variant="body2" color="error">
@@ -101,7 +101,7 @@ export default function AddDialogue({
           margin="normal"
           autoComplete="off"
           type="number"
-          {...register('age', { valueAsNumber: true })}
+          {...register("age", { valueAsNumber: true })}
         />
         {errors.age && (
           <Typography gutterBottom variant="body2" color="error">
@@ -115,7 +115,7 @@ export default function AddDialogue({
           variant="outlined"
           margin="normal"
           autoComplete="off"
-          {...register('numberOfRents', { valueAsNumber: true })}
+          {...register("numberOfRents", { valueAsNumber: true })}
         />
         {errors.numberOfRents && (
           <Typography gutterBottom variant="body2" color="error">
@@ -129,7 +129,7 @@ export default function AddDialogue({
           variant="outlined"
           margin="normal"
           autoComplete="off"
-          {...register('totalAverageWeightRatings', { valueAsNumber: true })}
+          {...register("totalAverageWeightRatings", { valueAsNumber: true })}
         />
         {errors.totalAverageWeightRatings && (
           <Typography gutterBottom variant="body2" color="error">
@@ -145,7 +145,7 @@ export default function AddDialogue({
           autoComplete="off"
           multiline
           rows={4}
-          {...register('address')}
+          {...register("address")}
         />
         {errors.address && (
           <Typography gutterBottom variant="body2" color="error">

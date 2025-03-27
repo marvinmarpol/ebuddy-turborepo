@@ -6,7 +6,7 @@ const USERS_COLLECTION = "USERS";
 
 export const getUsersPaginated = async (
   limit: number,
-  offset: number
+  offset: number,
 ): Promise<User[]> => {
   const query = db
     .collection(USERS_COLLECTION)
@@ -21,7 +21,7 @@ export const getUsersPaginated = async (
       ({
         id: doc.id,
         ...doc.data(),
-      }) as User
+      }) as User,
   );
 
   return users;
@@ -39,7 +39,7 @@ export const createUser = async (data: Partial<User>): Promise<string> => {
 
 export const updateUser = async (
   id: string,
-  data: Partial<User>
+  data: Partial<User>,
 ): Promise<void> => {
   await db.collection(USERS_COLLECTION).doc(id).set(data, { merge: true });
 };

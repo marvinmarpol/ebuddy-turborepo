@@ -6,10 +6,7 @@ export interface UpdateUserPayload {
   user: User;
 }
 
-export const updateUserData = async ({
-  token,
-  user,
-}: UpdateUserPayload) => {
+export const updateUserData = async ({ token, user }: UpdateUserPayload) => {
   const baseURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
   const path =
     process.env.NEXT_PUBLIC_UPDATE_USER_PATH || "/api/update-user-data";
@@ -19,7 +16,7 @@ export const updateUserData = async ({
     "POST",
     `${baseURL + path}`,
     user,
-    headers
+    headers,
   );
 
   return response.data;

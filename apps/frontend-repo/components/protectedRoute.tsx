@@ -1,8 +1,8 @@
-import { useRouter } from 'next/navigation';
-import { CircularProgress, Box } from '@mui/material';
-import { ReactNode, useEffect } from 'react';
+import { useRouter } from "next/navigation";
+import { CircularProgress, Box } from "@mui/material";
+import { ReactNode, useEffect } from "react";
 
-import { useAuth } from '../context/authProvider';
+import { useAuth } from "../context/authProvider";
 
 interface Props {
   children: ReactNode;
@@ -14,7 +14,7 @@ const ProtectedRoute = ({ children }: Props) => {
 
   useEffect(() => {
     if (!loading && !user) {
-      router.push('/auth/signin');
+      router.push("/auth/signin");
     }
   }, [user, loading, router]);
 
@@ -22,10 +22,10 @@ const ProtectedRoute = ({ children }: Props) => {
     return (
       <Box
         sx={{
-          display: 'flex',
-          height: '90vh',
-          alignItems: 'center',
-          justifyContent: 'center',
+          display: "flex",
+          height: "90vh",
+          alignItems: "center",
+          justifyContent: "center",
           mt: 5,
         }}
       >
