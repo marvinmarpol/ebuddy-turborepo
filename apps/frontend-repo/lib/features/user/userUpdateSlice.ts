@@ -14,8 +14,8 @@ export const userUpdateSlice = createAppSlice({
   initialState,
   reducers: (create) => ({
     updateUserAsync: create.asyncThunk(
-      async ({ id, token, user }: UpdateUserPayload) => {
-        return await updateUserData({ id, token, user });
+      async ({token, user }: UpdateUserPayload) => {
+        return await updateUserData({ token, user });
       },
       {
         pending: (state) => {

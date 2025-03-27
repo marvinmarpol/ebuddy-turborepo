@@ -3,40 +3,27 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
-  DialogTitle,
   TextField,
   Typography,
 } from "@mui/material";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { User, userSchema } from "@repo/entities";
-import { useEffect } from "react";
 import { UpdateButton } from "@repo/ui/button";
-import {
-  selectStatus,
-  updateUserAsync,
-} from "../lib/features/user/userUpdateSlice";
-import { useAppDispatch, useAppSelector } from "../lib/hooks";
 
 interface props {
-  token: string;
-  user?: User;
   openDialogue: boolean;
   onClose: () => void;
+  onSubmit: (data: User) => void;
 }
 
 export default function AddDialogue({
-  token,
-  user,
   openDialogue,
   onClose,
+  onSubmit,
 }: props) {
-  const dispatch = useAppDispatch();
-  const status = useAppSelector(selectStatus);
-
   type FormFields = z.infer<typeof userSchema>;
 
   const {
@@ -57,43 +44,9 @@ export default function AddDialogue({
     resolver: zodResolver(userSchema),
   });
 
-  useEffect(() => {
-    if (user) {
-      setValue("id", user?.id);
-      setValue("name", user?.name);
-      setValue("email", user?.email);
-      setValue("age", user?.age);
-      setValue("address", user?.address);
-      setValue("numberOfRents", user?.numberOfRents);
-      setValue("totalAverageWeightRatings", user?.totalAverageWeightRatings);
-    }
-  }, [user]);
-
   const resetAndClose = () => {
     reset();
     onClose();
-  };
-
-  const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    try {
-      dispatch(
-        updateUserAsync({
-          id: data.id || "",
-          token,
-          user: {
-            name: data.name,
-            email: data.email,
-            age: data.age,
-            address: data.address,
-            numberOfRents: data.numberOfRents,
-            totalAverageWeightRatings: data.totalAverageWeightRatings,
-          },
-        })
-      );
-    } catch (error: any) {
-    } finally {
-      onClose();
-    }
   };
 
   return (
@@ -108,15 +61,6 @@ export default function AddDialogue({
       }}
     >
       <DialogContent>
-        <TextField
-          fullWidth
-          label="ID"
-          variant="outlined"
-          margin="normal"
-          autoComplete="off"
-          disabled
-          {...register("id")}
-        />
         <TextField
           fullWidth
           label="Email"
@@ -206,7 +150,7 @@ export default function AddDialogue({
       </DialogContent>
       <DialogActions>
         <Button onClick={resetAndClose}>Cancel</Button>
-        <UpdateButton disabled={status == "loading"}>Update</UpdateButton>
+        <UpdateButton disabled={isSubmitting}>Submit</UpdateButton>
       </DialogActions>
     </Dialog>
   );

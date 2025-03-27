@@ -7,6 +7,6 @@ const userRoutes = express.Router();
 
 userRoutes.get("/users", authMiddleware, userList);
 userRoutes.get("/fetch-user-data/:id", authMiddleware, fetchUserData);
-userRoutes.post("/update-user-data/:id", authMiddleware, updateUserData);
+userRoutes.post("/update-user-data", authMiddleware, updateUserData);
 
 export default userRoutes;

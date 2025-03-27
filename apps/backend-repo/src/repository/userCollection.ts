@@ -32,6 +32,11 @@ export const getUserById = async (id: string): Promise<User | null> => {
   return doc.exists ? ({ id: doc.id, ...doc.data() } as User) : null;
 };
 
+export const createUser = async (data: Partial<User>): Promise<string> => {
+  const add = await db.collection(USERS_COLLECTION).add(data);
+  return add.id;
+};
+
 export const updateUser = async (
   id: string,
   data: Partial<User>

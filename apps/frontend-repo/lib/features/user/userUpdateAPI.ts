@@ -2,13 +2,11 @@ import { User } from "@repo/entities";
 import { httpRequest } from "@repo/helpers";
 
 export interface UpdateUserPayload {
-  id: string;
   token: string;
   user: User;
 }
 
 export const updateUserData = async ({
-  id,
   token,
   user,
 }: UpdateUserPayload) => {
@@ -19,7 +17,7 @@ export const updateUserData = async ({
 
   const response = await httpRequest<User>(
     "POST",
-    `${baseURL + path}/${id}`,
+    `${baseURL + path}`,
     user,
     headers
   );
