@@ -2,6 +2,7 @@
   "name": "ebuddy-turborepo",
   "private": true,
   "scripts": {
+    "build-packages": "turbo run build --filter=@repo/entities --filter=@repo/helpers",
     "build": "turbo run build",
     "clean": "turbo run clean",
     "dev": "turbo run dev",

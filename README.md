@@ -9,11 +9,16 @@ Make sure to install JDK version 11 or above to run the firebase emulator.
     npm install
     ```
 
-2. Run the firebase emulator from the monorepo root
+2. Instal shared helper packages and utilities
+    ```
+    npm run build-packages
+    ```
+
+3. Run the firebase emulator from the monorepo root
     ```
     npm run emulators:start
     ```
-3. Run the backend service and nextjs web app locally
+4. Run the backend service and nextjs web app locally
     ```
     npm run dev
     ```
