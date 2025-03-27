@@ -1,16 +1,14 @@
-import { Request, Response } from "express";
-import { userSchema } from "@repo/entities";
+import { Request, Response } from 'express';
+import { userSchema } from '@repo/entities';
 
 import {
   getUserById,
   getUsersPaginated,
   updateUser,
   createUser,
-} from "../repository/userCollection";
+} from '../repository/userCollection';
+import { getTotalPotential } from '@repo/helpers';
 
-const RATING_WEIGHT = 100;
-const RENT_WEIGHT = 10;
-const RECENT_DIVIDER = 1000000000;
 const DEFAULT_PER_PAGE = 10;
 
 export const userList = async (req: Request, res: Response) => {
@@ -22,7 +20,7 @@ export const userList = async (req: Request, res: Response) => {
     const users = await getUsersPaginated(limit, offset);
     res.status(200).json(users);
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch user data", raw: error });
+    res.status(500).json({ error: 'Failed to fetch user data', raw: error });
   }
 };
 
@@ -32,12 +30,12 @@ export const fetchUserData = async (req: Request, res: Response) => {
   try {
     const user = await getUserById(userId);
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: 'User not found' });
     }
 
     res.status(200).json(user);
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch user data", raw: error });
+    res.status(500).json({ error: 'Failed to fetch user data', raw: error });
   }
 };
 
@@ -47,12 +45,12 @@ export const updateUserData = async (req: Request, res: Response) => {
   const validation = userSchema.safeParse(userData);
   if (!validation.success) {
     return res.status(400).json({
-      error: "Validation failed",
+      error: 'Validation failed',
       details: validation.error.errors,
     });
   }
 
-  const userId = validation.data.id || "";
+  const userId = validation.data.id || '';
   let currentRating = validation.data.totalAverageWeightRatings || 0.0;
   let currentRent = validation.data.numberOfRents || 0;
   let currentRecent = validation.data.recentlyActive || 1743016720;
@@ -73,10 +71,11 @@ export const updateUserData = async (req: Request, res: Response) => {
       }
     }
 
-    validation.data.totalPotential =
-      currentRating * RATING_WEIGHT +
-      currentRent * RENT_WEIGHT +
-      currentRecent / RECENT_DIVIDER;
+    validation.data.totalPotential = getTotalPotential(
+      currentRating,
+      currentRent,
+      currentRecent
+    );
 
     if (userId) {
       await updateUser(userId, validation.data);
@@ -84,11 +83,11 @@ export const updateUserData = async (req: Request, res: Response) => {
       const newId = await createUser(validation.data);
       validation.data.id = newId;
     }
-    
+
     res.status(200).json(validation.data);
   } catch (error) {
     res.status(500).json({
-      error: "Failed to update user data",
+      error: 'Failed to update user data',
       raw: error,
     });
   }

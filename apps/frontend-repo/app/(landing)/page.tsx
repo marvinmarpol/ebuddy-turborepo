@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 import {
   Avatar,
   Backdrop,
@@ -17,23 +17,24 @@ import {
   Snackbar,
   TextField,
   Typography,
-} from "@mui/material";
-import { z } from "zod";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import ProtectedRoute from "../../components/protectedRoute";
-import Navbar from "../../components/navbar";
-import { getUserList } from "../../api/userListAPI";
-import { useAuth } from "../../context/authProvider";
-import { User, userSchema } from "@repo/entities";
-import FloatingAddButton from "../../components/fab";
-import AddDialogue from "../../components/addDialogue";
-import { UpdateButton } from "@repo/ui/button";
-import { useAppDispatch, useAppSelector } from "../../lib/hooks";
+} from '@mui/material';
+import { z } from 'zod';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import ProtectedRoute from '../../components/protectedRoute';
+import Navbar from '../../components/navbar';
+import { getUserList } from '../../api/userListAPI';
+import { useAuth } from '../../context/authProvider';
+import { User, userSchema } from '@repo/entities';
+import FloatingAddButton from '../../components/fab';
+import AddDialogue from '../../components/addDialogue';
+import { UpdateButton } from '@repo/ui/button';
+import { useAppDispatch, useAppSelector } from '../../lib/hooks';
 import {
   selectStatus,
   updateUserAsync,
-} from "../../lib/features/user/userUpdateSlice";
+} from '../../lib/features/user/userUpdateSlice';
+import { getTotalPotential } from '@repo/helpers';
 
 export default function Home() {
   const dispatch = useAppDispatch();
@@ -41,13 +42,13 @@ export default function Home() {
 
   const [users, setUsers] = useState<User[]>([]);
   const { user, loading } = useAuth();
-  const [idToken, setIdToken] = useState("");
+  const [idToken, setIdToken] = useState('');
 
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
   const [fetching, setFetching] = useState(false);
   const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
-  const [message, setMessage] = useState("error occured");
+  const [message, setMessage] = useState('error occured');
 
   const [dialogue, setDialogue] = useState(false);
 
@@ -62,10 +63,10 @@ export default function Home() {
     formState: { errors, isSubmitting },
   } = useForm<FormFields>({
     defaultValues: {
-      id: "",
-      name: "",
-      email: "",
-      address: "",
+      id: '',
+      name: '',
+      email: '',
+      address: '',
       numberOfRents: 0,
       totalAverageWeightRatings: 0.0,
     },
@@ -76,16 +77,16 @@ export default function Home() {
     setExpandedIndex(expandedIndex === index ? -1 : index);
 
     if (expandedIndex !== index) {
-      setValue("id", user.id);
-      setValue("name", user.name || "");
-      setValue("email", user.email || "");
-      setValue("age", user.age || 0);
-      setValue("numberOfRents", user.numberOfRents || 0);
+      setValue('id', user.id);
+      setValue('name', user.name || '');
+      setValue('email', user.email || '');
+      setValue('age', user.age || 0);
+      setValue('numberOfRents', user.numberOfRents || 0);
       setValue(
-        "totalAverageWeightRatings",
+        'totalAverageWeightRatings',
         user.totalAverageWeightRatings || 0
       );
-      setValue("address", user.address || "");
+      setValue('address', user.address || '');
     }
   };
 
@@ -96,30 +97,40 @@ export default function Home() {
         return;
       }
 
+      // recalculate total potential
+      data.totalPotential = getTotalPotential(
+        data.totalAverageWeightRatings,
+        data.numberOfRents,
+        data.recentlyActive
+      );
+
       // Clone and update the specific user
       const updatedUsers = [...users];
       updatedUsers[userIndex] = { ...updatedUsers[userIndex], ...data };
 
-      // Update local state
-      setUsers(updatedUsers);
-
       // Update user data to the API
-      const res = await dispatch(
+      await dispatch(
         updateUserAsync({
           token: idToken,
           user: updatedUsers[userIndex],
         })
       );
 
-      setMessage("User updated successfully");
+      // Update local state
+      setUsers(sortUsersByPotential(updatedUsers));
+
+      setMessage('User updated successfully');
       setIsSnackbarOpen(true);
     } catch (error: any) {
-      setMessage("Error updating user");
+      setMessage('Error updating user');
       setIsSnackbarOpen(true);
+    } finally {
+      setExpandedIndex(null);
     }
   };
 
   const handleAddUser: SubmitHandler<FormFields> = async (data) => {
+    setFetching(true);
     try {
       const res = await dispatch(
         updateUserAsync({
@@ -130,22 +141,42 @@ export default function Home() {
 
       const payload = res.payload as User;
       data.id = payload.id;
-      setUsers((prevUsers) => [...prevUsers, { ...data }]);
+
+      // recalculate total potential
+      data.totalPotential = getTotalPotential(
+        data.totalAverageWeightRatings,
+        data.numberOfRents,
+        data.recentlyActive
+      );
+
+      setUsers((prevUsers) =>
+        sortUsersByPotential([...prevUsers, { ...data }])
+      );
       setDialogue(false);
 
-      setMessage("User added successfully");
+      setMessage('User added successfully');
       setIsSnackbarOpen(true);
     } catch (error) {
-      setMessage("Failed to add new user");
+      setMessage('Failed to add new user');
       setIsSnackbarOpen(true);
+    } finally {
+      setFetching(false);
+      setExpandedIndex(null);
     }
+  };
+
+  const sortUsersByPotential = (users: User[]) => {
+    return [...users].sort(
+      (a, b) =>
+        (Number(b.totalPotential) || 0) - (Number(a.totalPotential) || 0)
+    );
   };
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         setFetching(true);
-        const token = (await user?.getIdToken(true)) || "";
+        const token = (await user?.getIdToken(true)) || '';
         setIdToken(token);
         const userList = await getUserList({ token });
         setUsers(userList.data);
@@ -176,11 +207,11 @@ export default function Home() {
       <Navbar />
 
       <Container maxWidth="xl">
-        <Box sx={{ display: "flex", flexWrap: "wrap" }}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
           {users?.map((item, index) => (
             <Card
               key={index}
-              sx={{ width: 255, my: 3, mx: 2, alignSelf: "flex-start" }}
+              sx={{ width: 255, my: 3, mx: 2, alignSelf: 'flex-start' }}
             >
               <CardHeader
                 avatar={
@@ -201,12 +232,12 @@ export default function Home() {
                   onClick={() => handleExpandClick(index, item)}
                   size="small"
                 >
-                  {expandedIndex === index ? "Show Less" : "Show More"}
+                  {expandedIndex === index ? 'Show Less' : 'Show More'}
                 </Button>
               </CardActions>
               <Collapse
                 in={expandedIndex === index}
-                timeout={"auto"}
+                timeout={'auto'}
                 unmountOnExit
               >
                 <CardContent>
@@ -224,7 +255,7 @@ export default function Home() {
                       variant="outlined"
                       margin="normal"
                       autoComplete="off"
-                      {...register("email")}
+                      {...register('email')}
                     />
                     {errors.email && (
                       <Typography gutterBottom variant="body2" color="error">
@@ -238,7 +269,7 @@ export default function Home() {
                       variant="outlined"
                       margin="normal"
                       autoComplete="off"
-                      {...register("name")}
+                      {...register('name')}
                     />
                     {errors.name && (
                       <Typography gutterBottom variant="body2" color="error">
@@ -253,7 +284,7 @@ export default function Home() {
                       margin="normal"
                       autoComplete="off"
                       type="number"
-                      {...register("age", { valueAsNumber: true })}
+                      {...register('age', { valueAsNumber: true })}
                     />
                     {errors.age && (
                       <Typography gutterBottom variant="body2" color="error">
@@ -267,7 +298,7 @@ export default function Home() {
                       variant="outlined"
                       margin="normal"
                       autoComplete="off"
-                      {...register("numberOfRents", { valueAsNumber: true })}
+                      {...register('numberOfRents', { valueAsNumber: true })}
                     />
                     {errors.numberOfRents && (
                       <Typography gutterBottom variant="body2" color="error">
@@ -281,7 +312,7 @@ export default function Home() {
                       variant="outlined"
                       margin="normal"
                       autoComplete="off"
-                      {...register("totalAverageWeightRatings", {
+                      {...register('totalAverageWeightRatings', {
                         valueAsNumber: true,
                       })}
                     />
@@ -299,7 +330,7 @@ export default function Home() {
                       autoComplete="off"
                       multiline
                       rows={4}
-                      {...register("address")}
+                      {...register('address')}
                     />
                     {errors.address && (
                       <Typography gutterBottom variant="body2" color="error">
@@ -307,7 +338,7 @@ export default function Home() {
                       </Typography>
                     )}
 
-                    <UpdateButton disabled={status == "loading"}>
+                    <UpdateButton disabled={status == 'loading'}>
                       Update
                     </UpdateButton>
                   </Box>
@@ -338,7 +369,7 @@ export default function Home() {
       </Container>
       <Backdrop
         sx={(theme) => ({
-          color: "primary",
+          color: 'primary',
           zIndex: theme.zIndex.drawer + 1,
         })}
         open={fetching || isSubmitting}
