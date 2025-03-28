@@ -11,7 +11,7 @@ Make sure to install JDK version 11 or above to run the firebase emulator.
 
 2. Instal shared helper packages and utilities
     ```
-    npm run build-packages
+    npm run build:packages
     ```
 
 3. Run the firebase emulator from the monorepo root
